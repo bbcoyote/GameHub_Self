@@ -1,6 +1,7 @@
 // To add more objects from the endpoint  go to the docs and add them to the interface.
-import { Button, Text } from "@chakra-ui/react";
+import { SimpleGrid, Text } from "@chakra-ui/react";
 import useGames from "../hooks/useGames";
+import GameCard from "./GameCard";
 
 const GameGrid = () => {
   const { games, error } = useGames();
@@ -8,16 +9,14 @@ const GameGrid = () => {
   return (
     <>
       {error && <Text>{error}</Text>}
-      <ul>
+      <SimpleGrid
+        columns={{ sm: 1, md: 2, lg: 3, xl: 5 }}
+        spacing={10}
+        padding={10}>
         {games.map((game) => {
-          return (
-            <div key={game.id}>
-              <li key={game.id}>{game.name}</li>
-              <Button>Button</Button>
-            </div>
-          );
+          return <GameCard key={game.id} game={game} />;
         })}
-      </ul>
+      </SimpleGrid>
     </>
   );
 };
