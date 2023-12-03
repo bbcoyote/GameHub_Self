@@ -13,6 +13,7 @@ export type Game = {
   id: number;
   name: string;
   background_image: string;
+  metacritic: number;
   parent_platforms: { platform: Platform }[];
 };
 
@@ -24,22 +25,28 @@ type FechGmeResp = {
 const useGames = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [error, setError] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     const Controller = new AbortController();
     const Signal = Controller.signal;
+    setLoading(true);
     apiClient
       .get<FechGmeResp>("/games", { signal: Signal })
-      .then((res) => setGames(res.data.results))
+      .then((res) => {
+        setGames(res.data.results);
+        setLoading(false);
+      })
       .catch((err) => {
         if (err instanceof CanceledError) return;
         setError(err.message);
+        setLoading(false);
       });
 
     return () => Controller.abort();
   }, []);
 
-  return { games, error };
+  return { games, error, isLoading };
 };
 
 export default useGames;
