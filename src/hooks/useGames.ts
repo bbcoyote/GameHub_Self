@@ -16,11 +16,11 @@ export type Game = {
   parent_platforms: { platform: Platform }[];
 };
 
-const useGames = (selectedGenre: Genre | null) =>
+const useGames = (selectedGenre: Genre | null, selectedPlatform: Platform) =>
   useData<Game>(
     "/games",
-    { params: { genres: selectedGenre?.id } },
-    [selectedGenre?.id].filter((id): id is number => id !== undefined)
+    { params: { genres: selectedGenre?.id, platforms: selectedPlatform?.id } },
+    [selectedGenre?.id, selectedPlatform?.id]
   );
 
 export default useGames;
