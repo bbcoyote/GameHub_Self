@@ -1,6 +1,6 @@
 // To add more objects from the endpoint  go to RAWG docs and add them to the interface. Good Luck untangling this mess!
+import { GameQuery } from "../App";
 import useData from "./useData";
-import { Genre } from "./useGenres";
 
 export type Platform = {
   id: number;
@@ -16,11 +16,16 @@ export type Game = {
   parent_platforms: { platform: Platform }[];
 };
 
-const useGames = (selectedGenre: Genre | null, selectedPlatform: Platform) =>
+const useGames = (gameQuery: GameQuery) =>
   useData<Game>(
     "/games",
-    { params: { genres: selectedGenre?.id, platforms: selectedPlatform?.id } },
-    [selectedGenre?.id, selectedPlatform?.id]
+    {
+      params: {
+        genres: gameQuery.genre?.id,
+        platforms: gameQuery.platform?.id,
+      },
+    },
+    [gameQuery.genre?.id, gameQuery.platform?.id]
   );
 
 export default useGames;
